@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class GroundEnemyAi : MonoBehaviour
 {
@@ -22,30 +21,7 @@ public class GroundEnemyAi : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (movingRight)
-        {
-            if (transform.position.x < patrolRight.transform.position.x)
-            {
-                MovingTo(1);
-                Flip(-1);
-            }
-            else
-            {
-                ChangeDirection();
-            }
-        }
-        else
-        {
-            if (transform.position.x > patrolLeft.transform.position.x)
-            {
-                MovingTo(-1);
-                Flip(1);
-            }
-            else
-            {
-                ChangeDirection();
-            }
-        }
+        PatrolMovement();
     }
 
     private void MovingTo(int moveDir)
@@ -63,6 +39,33 @@ public class GroundEnemyAi : MonoBehaviour
        transform.localScale = new Vector3 ((initSacale.x * moveDir)
             , initSacale.y, initSacale.z);
     }
-    
+    private void PatrolMovement()
+        {
+            if (movingRight)
+            {
+                if (transform.position.x < patrolRight.transform.position.x)
+                {
+                    MovingTo(1);
+                    Flip(-1);
+                }
+                else
+                {
+                    ChangeDirection();
+                }
+            }
+            else
+            {
+                if (transform.position.x > patrolLeft.transform.position.x)
+                {
+                    MovingTo(-1);
+                    Flip(1);
+                }
+                else
+                {
+                    ChangeDirection();
+                }
+            }
+
+        }   
 }
 
