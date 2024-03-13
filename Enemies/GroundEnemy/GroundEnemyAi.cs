@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GroundEnemyAi : MonoBehaviour
@@ -7,7 +6,7 @@ public class GroundEnemyAi : MonoBehaviour
     // [SerializeField] private int moveDir = 1;
     [SerializeField] private float moveSpeed;
     private Rigidbody2D rb;
-    private bool movingRight = true;
+    private bool facingRight = true;
     private Vector3 initSacale;
 
     [Header("Patrol points")]
@@ -33,19 +32,47 @@ public class GroundEnemyAi : MonoBehaviour
     private void FixedUpdate()
     {
         PatrolMovement();
+        DetectPlayer();
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(boxColider.bounds.center + rayOffSet, raySize);
+        if (facingRight)
+        {
+            Gizmos.DrawWireCube(boxColider.bounds.center + rayOffSet, raySize);
+
+        }
+        else
+        {
+            Gizmos.DrawWireCube(boxColider.bounds.center + rayOffSet * -1, raySize);
+
+        }
+        
 
     }
 
-    private void DetectPlayer()
+    private bool DetectPlayer()
     {
-        RaycastHit2D hit = Physics2D.BoxCast(rb.position, new Vector2(2,2)  
-                ,0 ,Vector2.right, 0, playerLayer);
+        if (facingRight)
+        {
+            RaycastHit2D hit = Physics2D.BoxCast(boxColider.bounds.center + rayOffSet
+                , raySize  
+                , 0 ,Vector2.right, 0, playerLayer);
+
+            return hit.collider != null;
+
+        }
+        else
+        {
+            RaycastHit2D hit = Physics2D.BoxCast(boxColider.bounds.center + rayOffSet * -1
+                , raySize  
+                , 0 ,Vector2.right, 0, playerLayer);
+
+
+            return hit.collider != null;
+            
+        }
     }
 
 
@@ -57,7 +84,7 @@ public class GroundEnemyAi : MonoBehaviour
 
     private void ChangeDirection()
     {
-        movingRight = !movingRight;
+        facingRight = !facingRight;
     }
     private void Flip(int moveDir)
     {
@@ -66,7 +93,7 @@ public class GroundEnemyAi : MonoBehaviour
     }
     private void PatrolMovement()
         {
-            if (movingRight)
+            if (facingRight)
             {
                 if (transform.position.x < patrolRight.transform.position.x)
                 {
