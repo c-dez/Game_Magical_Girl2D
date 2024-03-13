@@ -17,23 +17,28 @@ public class GroundEnemyAi : MonoBehaviour
     [Header("Raycast")]
     [SerializeField] private BoxCollider2D boxColider;
     [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private Vector3 rayOffSet;
+    [SerializeField] private Vector3 raySize;
+
 
     private void Awake()
     {
-        rb =  GetComponent<Rigidbody2D>();
         initSacale = transform.localScale;
+        rb =  GetComponent<Rigidbody2D>();
+    }
+    private void Update()
+    {
     }
 
     private void FixedUpdate()
     {
         PatrolMovement();
-
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(boxColider.bounds.center, new Vector2(5,2));
+        Gizmos.DrawWireCube(boxColider.bounds.center + rayOffSet, raySize);
 
     }
 
