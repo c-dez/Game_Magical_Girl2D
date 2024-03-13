@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GroundEnemyAi : MonoBehaviour
@@ -6,12 +7,16 @@ public class GroundEnemyAi : MonoBehaviour
     // [SerializeField] private int moveDir = 1;
     [SerializeField] private float moveSpeed;
     private Rigidbody2D rb;
-
-    [Header("Patrol points")]
-    [SerializeField] private Transform patrolRight;
-    [SerializeField] private Transform patrolLeft;
     private bool movingRight = true;
     private Vector3 initSacale;
+
+    [Header("Patrol points")]
+    [SerializeField] private Transform patrolLeft;
+    [SerializeField] private Transform patrolRight;
+
+    [Header("Raycast")]
+    [SerializeField] private BoxCollider2D boxColider;
+    [SerializeField] private LayerMask playerLayer;
 
     private void Awake()
     {
@@ -22,7 +27,22 @@ public class GroundEnemyAi : MonoBehaviour
     private void FixedUpdate()
     {
         PatrolMovement();
+
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(boxColider.bounds.center, new Vector2(5,2));
+
+    }
+
+    private void DetectPlayer()
+    {
+        RaycastHit2D hit = Physics2D.BoxCast(rb.position, new Vector2(2,2)  
+                ,0 ,Vector2.right, 0, playerLayer);
+    }
+
 
     private void MovingTo(int moveDir)
     {
