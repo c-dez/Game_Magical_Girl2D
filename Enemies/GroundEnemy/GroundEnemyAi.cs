@@ -3,11 +3,10 @@ using UnityEngine;
 public class GroundEnemyAi : MonoBehaviour
 {
     [Header("Move")]
-    // [SerializeField] private int moveDir = 1;
     [SerializeField] private float moveSpeed;
     private Rigidbody2D rb;
     private bool facingRight = true;
-    private Vector3 initSacale;
+    private Vector3 initScale;
 
     [Header("Patrol points")]
     [SerializeField] private Transform patrolLeft;
@@ -22,13 +21,9 @@ public class GroundEnemyAi : MonoBehaviour
 
     private void Awake()
     {
-        initSacale = transform.localScale;
+        initScale = transform.localScale;
         rb =  GetComponent<Rigidbody2D>();
     }
-    private void Update()
-    {
-    }
-
     private void FixedUpdate()
     {
         PatrolMovement();
@@ -88,8 +83,8 @@ public class GroundEnemyAi : MonoBehaviour
     }
     private void Flip(int moveDir)
     {
-       transform.localScale = new Vector3 ((initSacale.x * moveDir)
-            , initSacale.y, initSacale.z);
+       transform.localScale = new Vector3 ((initScale.x * moveDir)
+            , initScale.y, initScale.z);
     }
     private void PatrolMovement()
         {
