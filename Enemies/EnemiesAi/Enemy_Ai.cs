@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GroundEnemyAi : MonoBehaviour
+public class Enemy_Ai : MonoBehaviour
 {
     [Header("Move")]
     [SerializeField] private float moveSpeed;
@@ -26,12 +26,9 @@ public class GroundEnemyAi : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        // DetectPlayer();
-
         if (!DetectPlayer())
         {
             PatrolMovement();
-
         }
     }
 
@@ -41,15 +38,11 @@ public class GroundEnemyAi : MonoBehaviour
         if (facingRight)
         {
             Gizmos.DrawWireCube(boxColider.bounds.center + rayOffSet, raySize);
-
         }
         else
         {
             Gizmos.DrawWireCube(boxColider.bounds.center + rayOffSet * -1, raySize);
-
         }
-        
-
     }
 
     private bool DetectPlayer()
@@ -61,7 +54,6 @@ public class GroundEnemyAi : MonoBehaviour
                 , 0 ,Vector2.right, 0, playerLayer);
 
             return hit.collider != null;
-
         }
         else
         {
@@ -69,9 +61,7 @@ public class GroundEnemyAi : MonoBehaviour
                 , raySize  
                 , 0 ,Vector2.right, 0, playerLayer);
 
-
             return hit.collider != null;
-            
         }
     }
 
@@ -79,7 +69,6 @@ public class GroundEnemyAi : MonoBehaviour
     private void MovingTo(int moveDir)
     {
         rb.velocity = new Vector3(moveSpeed * moveDir, 0,0);
-
     }
 
     private void ChangeDirection()
@@ -92,32 +81,34 @@ public class GroundEnemyAi : MonoBehaviour
             , initScale.y, initScale.z);
     }
     private void PatrolMovement()//quitar harcode con facingRight?
+    {
+        if (facingRight)
         {
-            if (facingRight)
+            if (transform.position.x < patrolRight.transform.position.x)
             {
-                if (transform.position.x < patrolRight.transform.position.x)
-                {
-                    MovingTo(1);
-                    Flip(-1);
-                }
-                else
-                {
-                    ChangeDirection();
-                }
+                MovingTo(1);
+                Flip(-1);
             }
             else
             {
-                if (transform.position.x > patrolLeft.transform.position.x)
-                {
-                    MovingTo(-1);
-                    Flip(1);
-                }
-                else
-                {
-                    ChangeDirection();
-                }
+                ChangeDirection();
             }
+        }
+        else
+        {
+            if (transform.position.x > patrolLeft.transform.position.x)
+            {
+                MovingTo(-1);
+                Flip(1);
+            }
+            else
+            {
+                ChangeDirection();
+            }
+        }
 
-        }   
+    }   
 }
+
+
 
