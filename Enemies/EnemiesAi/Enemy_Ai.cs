@@ -1,114 +1,80 @@
 using UnityEngine;
 
 public class Enemy_Ai : MonoBehaviour
+
 {
-    [Header("Move")]
-    [SerializeField] private float moveSpeed;
-    private Rigidbody2D rb;
-    private bool facingRight = true;
-    private Vector3 initScale;
+    //movimiento
+    [SerializeField] private float moveSpeed = 5f;
+    private int  moveDirection;
 
     [Header("Patrol points")]
-    [SerializeField] private Transform patrolLeft;
-    [SerializeField] private Transform patrolRight;
+    [SerializeField] private Transform leftPoint;
+    [SerializeField] private Transform rightPoint;
 
-    [Header("Raycast")]
-    [SerializeField] private BoxCollider2D boxColider;
-    [SerializeField] private LayerMask playerLayer;
-    [SerializeField] private Vector3 rayOffSet;
-    [SerializeField] private Vector3 raySize;
 
+    private Rigidbody2D rb;
 
     private void Awake()
     {
-        initScale = transform.localScale;
-        rb =  GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
+    }
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.E))//for testing
+        {
+            Flip();
+        }
     }
     private void FixedUpdate()
     {
-        if (!DetectPlayer())
-        {
-            PatrolMovement();
-        }
+        PatrolMovement();
     }
 
-    private void OnDrawGizmos()
+    private void PatrolMovement()
     {
-        Gizmos.color = Color.red;
-        if (facingRight)
+        CheckFacingDirection();
+        
+        if( moveDirection == -1)
         {
-            Gizmos.DrawWireCube(boxColider.bounds.center + rayOffSet, raySize);
-        }
-        else
-        {
-            Gizmos.DrawWireCube(boxColider.bounds.center + rayOffSet * -1, raySize);
-        }
-    }
-
-    private bool DetectPlayer()
-    {
-        if (facingRight)
-        {
-            RaycastHit2D hit = Physics2D.BoxCast(boxColider.bounds.center + rayOffSet
-                , raySize  
-                , 0 ,Vector2.right, 0, playerLayer);
-
-            return hit.collider != null;
-        }
-        else
-        {
-            RaycastHit2D hit = Physics2D.BoxCast(boxColider.bounds.center + rayOffSet * -1
-                , raySize  
-                , 0 ,Vector2.right, 0, playerLayer);
-
-            return hit.collider != null;
-        }
-    }
-
-
-    private void MovingTo(int moveDir)
-    {
-        rb.velocity = new Vector3(moveSpeed * moveDir, 0,0);
-    }
-
-    private void ChangeDirection()
-    {
-        facingRight = !facingRight;
-    }
-    private void Flip(int moveDir)
-    {
-       transform.localScale = new Vector3 ((initScale.x * moveDir)
-            , initScale.y, initScale.z);
-    }
-    private void PatrolMovement()//quitar harcode con facingRight?
-    {
-        if (facingRight)
-        {
-            if (transform.position.x < patrolRight.transform.position.x)
+            if(transform.position.x > leftPoint.transform.position.x)
             {
-                MovingTo(1);
-                Flip(-1);
+                rb.velocity = new Vector3(moveSpeed * moveDirection, rb.velocity.y,0);
             }
-            else
-            {
-                ChangeDirection();
+            else{
+                Flip();
             }
         }
-        else
+        if(moveDirection == 1)
         {
-            if (transform.position.x > patrolLeft.transform.position.x)
+            if(transform.position.x < rightPoint.transform.position.x)
             {
-                MovingTo(-1);
-                Flip(1);
+                rb.velocity = new Vector3(moveSpeed * moveDirection, rb.velocity.y,0);
             }
-            else
-            {
-                ChangeDirection();
+            else{
+                Flip();
             }
         }
-
-    }   
+    }
+    private void Flip()
+    {
+        CheckFacingDirection();
+        if (moveDirection == -1)
+        {
+            transform.Rotate(0,180,0);
+        }
+        if (moveDirection == 1)
+        {
+            transform.Rotate(0,-180,0);
+        }
+    }
+    private void CheckFacingDirection()
+    {
+        if(transform.localRotation.y == 0)
+        {   
+            moveDirection = -1;
+        }
+        else{
+            moveDirection = 1;
+        }
+    }
 }
-
-
-
