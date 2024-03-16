@@ -19,6 +19,12 @@ public class Enemy_Ai : MonoBehaviour
     [SerializeField] private Vector3 boxOffset;
     [SerializeField] private Vector3 boxSize;
 
+    [Header("Shoot")]
+    [SerializeField] private GameObject enemy_Bullet;
+    public int BulletDirection;
+    [SerializeField] private Transform bulletGun;
+
+
     
 
     private void Awake()
@@ -34,14 +40,20 @@ public class Enemy_Ai : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        BulletDirection = moveDirection;
         if(!DetectPlayerBoxCast())
         {
             PatrolMovement();
         }
         if(DetectPlayerBoxCast())
         {
-            //shoot
+            Shoot();
         }
+    }
+
+    private void Shoot()
+    {
+        Instantiate(enemy_Bullet,bulletGun.position,bulletGun.rotation);
     }
 
     //detect player
