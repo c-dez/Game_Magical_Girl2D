@@ -1,5 +1,3 @@
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 public class Enemy_Ai : MonoBehaviour
@@ -16,6 +14,7 @@ public class Enemy_Ai : MonoBehaviour
 
 
     [Header("BoxCast")]
+    [SerializeField] private LayerMask playerLayer;
     [SerializeField] private BoxCollider2D boxColider;
     [SerializeField] private Vector3 boxOffset;
     [SerializeField] private Vector3 boxSize;
@@ -25,7 +24,6 @@ public class Enemy_Ai : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        // boxColider = GetComponent<BoxCollider2D>();
     }
     private void Update()
     {
@@ -37,24 +35,35 @@ public class Enemy_Ai : MonoBehaviour
     private void FixedUpdate()
     {
         PatrolMovement();
-        // Physics2D.BoxCast(boxColider.bounds.center, boxSize, 0, boxDirection);
+        CreateBoxCast();
     }
 
     //detect player
     private void OnDrawGizmos()
     {   
         Gizmos.color = Color.red;
-        if(moveDirection == 1)
+        if(moveDirection == -1)
+        {
+            Gizmos.DrawWireCube(boxColider.bounds.center + boxOffset *-1, boxSize);
+        }
+        else
         {
             Gizmos.DrawWireCube(boxColider.bounds.center + boxOffset, boxSize);
-
         }
-        else{
-            Gizmos.DrawWireCube(boxColider.bounds.center + boxOffset *-1, boxSize);
+    }
+    private bool CreateBoxCast()
+    {
 
+        if(moveDirection == -1)
+        {
+           RaycastHit2D hit = Physics2D.BoxCast(boxColider.bounds.center + boxOffset * -1, boxSize, 0 ,Vector2.right, 0, playerLayer);
+            return hit.collider != null;
         }
-
-
+        else
+        {
+            RaycastHit2D hit = Physics2D.BoxCast(boxColider.bounds.center + boxOffset , boxSize, 0 ,Vector2.right, 0, playerLayer);
+            return hit.collider != null;
+        }
 
     }
     
