@@ -21,8 +21,11 @@ public class Enemy_Ai : MonoBehaviour
 
     [Header("Shoot")]
     [SerializeField] private GameObject enemy_Bullet;
-    public int BulletDirection;
     [SerializeField] private Transform bulletGun;
+
+    //cooldown
+    [SerializeField] private float cooldownTime = 2f;
+    private float timeStamp;
 
 
     
@@ -40,16 +43,22 @@ public class Enemy_Ai : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        BulletDirection = moveDirection;
         if(!DetectPlayerBoxCast())
         {
             PatrolMovement();
         }
         if(DetectPlayerBoxCast())
         {
-            Shoot();
+
+            if(Time.time > timeStamp + cooldownTime)
+            {
+                Shoot();
+                timeStamp = Time.time;
+
+            }
         }
     }
+
 
     private void Shoot()
     {
