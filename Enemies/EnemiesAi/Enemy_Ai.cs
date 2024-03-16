@@ -34,8 +34,15 @@ public class Enemy_Ai : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        PatrolMovement();
-        CreateBoxCast();
+        // CreateBoxCast();
+        if(!DetectPlayer())
+        {
+            PatrolMovement();
+        }
+        if(DetectPlayer())
+        {
+            //shoot
+        }
     }
 
     //detect player
@@ -51,7 +58,7 @@ public class Enemy_Ai : MonoBehaviour
             Gizmos.DrawWireCube(boxColider.bounds.center + boxOffset, boxSize);
         }
     }
-    private bool CreateBoxCast()
+    private bool DetectPlayer()
     {
 
         if(moveDirection == -1)
