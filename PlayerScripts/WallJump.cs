@@ -6,6 +6,19 @@ public class WallJump : MonoBehaviour
     [Header("Boxcast")]
     [SerializeField] private BoxCollider2D boxColider;
     [SerializeField] private Vector3 boxSize;
+    [SerializeField] private LayerMask wallLayer;
+
+    private void FixedUpdate()
+    {
+
+        RaycastHit2D hit = 
+        Physics2D.BoxCast(boxColider.bounds.center,boxSize,0,Vector2.right,0, wallLayer);
+
+        if(hit.collider != null)
+        {
+            Debug.Log("hit wall");
+        }
+    }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
