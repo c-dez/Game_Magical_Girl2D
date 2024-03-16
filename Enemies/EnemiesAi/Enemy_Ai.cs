@@ -1,3 +1,5 @@
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class Enemy_Ai : MonoBehaviour
@@ -5,6 +7,7 @@ public class Enemy_Ai : MonoBehaviour
 {
     //movimiento
     [SerializeField] private float moveSpeed = 5f;
+    private Rigidbody2D rb;
     private int  moveDirection;
 
     [Header("Patrol points")]
@@ -12,24 +15,52 @@ public class Enemy_Ai : MonoBehaviour
     [SerializeField] private Transform rightPoint;
 
 
-    private Rigidbody2D rb;
+    [Header("BoxCast")]
+    [SerializeField] private BoxCollider2D boxColider;
+    [SerializeField] private Vector3 boxOffset;
+    [SerializeField] private Vector3 boxSize;
+
+    
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        // boxColider = GetComponent<BoxCollider2D>();
     }
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.E))//for testing
         {
-            Flip();
+            // Flip();
         }
     }
     private void FixedUpdate()
     {
         PatrolMovement();
+        // Physics2D.BoxCast(boxColider.bounds.center, boxSize, 0, boxDirection);
     }
 
+    //detect player
+    private void OnDrawGizmos()
+    {   
+        Gizmos.color = Color.red;
+        if(moveDirection == 1)
+        {
+            Gizmos.DrawWireCube(boxColider.bounds.center + boxOffset, boxSize);
+
+        }
+        else{
+            Gizmos.DrawWireCube(boxColider.bounds.center + boxOffset *-1, boxSize);
+
+        }
+
+
+
+    }
+    
+/// <summary>
+/// patrol movement
+/// </summary>
     private void PatrolMovement()
     {
         CheckFacingDirection();
