@@ -3,12 +3,20 @@ using UnityEngine;
 
 public class WallJump : MonoBehaviour
 {
+    //traer moveInput de PlayerController
+    private float moveInput;
+    private PlayerController playerController;
     [Header("Boxcast")]
     [SerializeField] private BoxCollider2D boxColider;
     [SerializeField] private Vector3 boxSize;
     [SerializeField] private LayerMask wallLayer;
     private bool hittingWall;
 
+    private void Awake()
+    {
+        playerController = GetComponent<PlayerController>();
+        moveInput = playerController.moveInput;
+    }
     private void FixedUpdate()
     {
         hittingWall = HittingWall();
