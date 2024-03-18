@@ -1,25 +1,43 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class WallJump : MonoBehaviour
 {
     //traer moveInput de PlayerController
-    private float moveInput;
+    public float moveInput;
     private PlayerController playerController;
+    private Rigidbody2D rb;
     [Header("Boxcast")]
     [SerializeField] private BoxCollider2D boxColider;
     [SerializeField] private Vector3 boxSize;
     [SerializeField] private LayerMask wallLayer;
-    private bool hittingWall;
+
+    public float wallSpeed;
 
     private void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
         playerController = GetComponent<PlayerController>();
-        moveInput = playerController.moveInput;
+        
     }
     private void FixedUpdate()
     {
-        hittingWall = HittingWall();
+        moveInput = playerController.moveInput;
+        WallSlide();
+
+        /*
+        if hittingWall true && moveDir == -1 
+        change friction
+        give jump
+        */
+    }
+
+    private void WallSlide()
+    {
+        if(HittingWall() && moveInput !=0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y,- wallSpeed,20 ));
+        }
+
     }
 
     private bool HittingWall()

@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpTime;
     private float jumpCounter;
     private bool isJumping;
-    [SerializeField] private int maxExtraJumps = 1;
+    public int maxExtraJumps = 1;
     private int extraJumps;
 
 
