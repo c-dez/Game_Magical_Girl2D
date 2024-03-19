@@ -12,14 +12,14 @@ public class PlayerController : MonoBehaviour
     //jumping
     [Header("Jump")]
     [SerializeField] private float jumpForce = 5f;
-    public bool isGrounded;//public to be read by PlayerAnimationsScript
-    public Transform groundCheck;
-    public float checkRadius;
-    public LayerMask whatIsGround;
     [SerializeField] private float jumpTime;
+    public bool isGrounded;//public to be read by PlayerAnimationsScript
+    [SerializeField] private float checkRadius;
+    [SerializeField] private int maxExtraJumps;
+    public Transform groundCheck;
+    public LayerMask whatIsGround;
     private float jumpCounter;
     private bool isJumping;
-    public int maxExtraJumps = 1;
     private int extraJumps;
 
 
@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
         FaceDirection();
         
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+        CheckIsGrounded();
 
         
     }
@@ -72,6 +72,11 @@ public class PlayerController : MonoBehaviour
         {
             isJumping = false;
         }
+    }
+
+    private void CheckIsGrounded()
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
     }
 
     private void FaceDirection()
