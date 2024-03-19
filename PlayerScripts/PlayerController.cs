@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
     [Header("Jump")]
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float jumpTime;
-    // [SerializeField] private float checkRadius;
     [SerializeField] private int maxExtraJumps;
     private float jumpCounter;
     private bool isJumping;
@@ -21,11 +20,18 @@ public class PlayerController : MonoBehaviour
 
     [Header("Ground check")]
     public bool isGrounded;//public to be read by PlayerAnimationsScript
+    public LayerMask whatIsGround;
     [SerializeField] private BoxCollider2D boxCollider2D;
     [SerializeField] private Vector3 boxOffset;
     [SerializeField] private Vector3 boxSize;
-    public LayerMask whatIsGround;
-    public Transform groundCheck;
+    // public Transform groundCheck;
+
+    [Header("Wall check")]
+    [SerializeField] private LayerMask whatIsWall;
+    [SerializeField] private Vector3 wallBoxSize;
+
+
+
 
 
     private void Awake()
@@ -46,37 +52,7 @@ public class PlayerController : MonoBehaviour
     {
         Jump();
 
-        // if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true)
-        // {
-        //     rb.velocity = Vector2.up * jumpForce;
-        //     isJumping = true;
-        //     jumpCounter = jumpTime;
-        // }
-        // if (isGrounded == false && extraJumps >= 1 && Input.GetKeyDown(KeyCode.Space))
-        // {
-        //     rb.velocity = Vector2.up * jumpForce * 1.2f;
-        //     extraJumps--;
-        // }
-        // if (isGrounded == true)
-        // {
-        //     extraJumps = maxExtraJumps;
-        // }
-        // if(Input.GetKey(KeyCode.Space) && isJumping == true)
-        // {
-        //     if (jumpCounter > 0)
-        //     {
-        //         rb.velocity = Vector2.up * jumpForce;
-        //         jumpCounter -= Time.deltaTime;
-        //     }
-        //     else
-        //     {
-        //         isJumping = false;
-        //     }
-        // }
-        // if (Input.GetKeyUp(KeyCode.Space))
-        // {
-        //     isJumping = false;
-        // }
+       
     }
 
     private void Jump()
@@ -102,7 +78,12 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(boxCollider2D.bounds.center + boxOffset, boxSize);
+        Gizmos.DrawWireCube(boxCollider2D.bounds.center + boxOffset, boxSize);//groundCheck
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(boxCollider2D.bounds.center, wallBoxSize);
+
+
     }
 
     private bool BoxCastGroundCheck()
