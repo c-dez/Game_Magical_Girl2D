@@ -11,28 +11,28 @@ public class PlayerHealtScript : MonoBehaviour
         playerCurrentHealt = playerMaxHealt;
     }
 
-    private void OnCollisionEnter2D(Collision2D colision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (colision.gameObject.tag == "enemy")//testing
+        if (collision.gameObject.tag == "enemy")//testing
         {
-
-            if(colision.gameObject.name == "DroneEnemy")
+            if(collision.gameObject.name == "DroneEnemy")
             {
-                EnemyStats enemyStats = colision.gameObject.GetComponent<EnemyStats>();
-
+                EnemyStats enemyStats = collision.gameObject.GetComponent<EnemyStats>();
                 playerCurrentHealt = ReciveDamage(playerCurrentHealt, enemyStats.damage);
-                Debug.Log(colision.gameObject.name);
-
+                Debug.Log(collision.gameObject.name);
             }
-            if (colision.gameObject.name == "GroundEnemy")
+            if (collision.gameObject.name == "GroundEnemy")
             {
-                GroundEnemyStats groundEnemyStats = colision.gameObject.GetComponent<GroundEnemyStats>();
+                GroundEnemyStats groundEnemyStats = collision.gameObject.GetComponent<GroundEnemyStats>();
                 playerCurrentHealt = ReciveDamage(playerCurrentHealt, groundEnemyStats.damage);
-                Debug.Log(colision.gameObject.name);
-
+                Debug.Log(collision.gameObject.name);
             }
-
         } 
+        
+        if(collision.gameObject.tag == "bullet")
+        {
+            playerCurrentHealt -= 1;
+        }
     }
 
     private int ReciveDamage(int playerCurrentHealt, int damage)
