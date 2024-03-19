@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -38,8 +37,6 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         MovePlayer();
-        FaceDirection();
-        
         BoxCastGroundCheck();
 
         
@@ -84,7 +81,6 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-
         if(isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             rb.velocity = Vector2.up * jumpForce;
@@ -141,6 +137,7 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
+        FaceDirection();
         moveInput = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
         
