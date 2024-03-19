@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -22,18 +23,24 @@ public class PlayerController : MonoBehaviour
     private bool isJumping;
     private int extraJumps;
 
+    [Header("BoxCast")]
+    private BoxCollider2D boxCollider2D;
+    [SerializeField] private Vector3 boxOffset;
+    [SerializeField] private Vector3 boxSize;
+
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        boxCollider2D = GetComponent<BoxCollider2D>();
     }
     
 
     private void FixedUpdate()
     {
+        MovePlayer();
         FaceDirection();
         
-        MovePlayer();
         CheckIsGrounded();
 
         
@@ -96,6 +103,11 @@ public class PlayerController : MonoBehaviour
                 isJumping = false;
             }
         }
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(boxCollider2D.bounds.center + boxOffset,boxSize);
     }
 
     private void CheckIsGrounded()
