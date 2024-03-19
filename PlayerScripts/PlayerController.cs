@@ -32,17 +32,11 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         MovePlayer();
+        FaceDirection();
         
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
 
-        if (facingRight == false && moveInput > 0)
-        {
-            Flip();
-        }
-        else if (facingRight == true && moveInput < 0)
-        {
-            Flip();
-        }
+        
     }
 
     private void Update()
@@ -80,10 +74,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void FaceDirection()
+    {
+        if (facingRight == false && moveInput > 0)
+        {
+            Flip();
+        }
+        else if (facingRight == true && moveInput < 0)
+        {
+            Flip();
+        }
+    }
+
     private void MovePlayer()
     {
         moveInput = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        
     }
 
     private void Flip()
