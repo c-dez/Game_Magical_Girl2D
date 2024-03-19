@@ -31,9 +31,9 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        MovePlayer();
         FaceDirection();
         
+        MovePlayer();
         CheckIsGrounded();
 
         
@@ -41,36 +41,60 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true)
+        Jump();
+
+        // if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true)
+        // {
+        //     rb.velocity = Vector2.up * jumpForce;
+        //     isJumping = true;
+        //     jumpCounter = jumpTime;
+        // }
+        // if (isGrounded == false && extraJumps >= 1 && Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     rb.velocity = Vector2.up * jumpForce * 1.2f;
+        //     extraJumps--;
+        // }
+        // if (isGrounded == true)
+        // {
+        //     extraJumps = maxExtraJumps;
+        // }
+        // if(Input.GetKey(KeyCode.Space) && isJumping == true)
+        // {
+        //     if (jumpCounter > 0)
+        //     {
+        //         rb.velocity = Vector2.up * jumpForce;
+        //         jumpCounter -= Time.deltaTime;
+        //     }
+        //     else
+        //     {
+        //         isJumping = false;
+        //     }
+        // }
+        // if (Input.GetKeyUp(KeyCode.Space))
+        // {
+        //     isJumping = false;
+        // }
+    }
+
+    private void Jump()
+    {
+
+        if(isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             rb.velocity = Vector2.up * jumpForce;
             isJumping = true;
             jumpCounter = jumpTime;
         }
-        if (isGrounded == false && extraJumps >= 1 && Input.GetKeyDown(KeyCode.Space))
+        if(isJumping && Input.GetKey(KeyCode.Space))
         {
-            rb.velocity = Vector2.up * jumpForce * 1.2f;
-            extraJumps--;
-        }
-        if (isGrounded == true)
-        {
-            extraJumps = maxExtraJumps;
-        }
-        if(Input.GetKey(KeyCode.Space) && isJumping == true)
-        {
-            if (jumpCounter > 0)
+            if(jumpCounter > 0)
             {
                 rb.velocity = Vector2.up * jumpForce;
                 jumpCounter -= Time.deltaTime;
             }
-            else
-            {
+            else{
                 isJumping = false;
             }
-        }
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            isJumping = false;
         }
     }
 
