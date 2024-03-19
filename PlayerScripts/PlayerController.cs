@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int maxExtraJumps;
     private float jumpCounter;
     private bool isJumping;
-    private int extraJumps;
 
     [Header("Ground check")]
     public bool isGrounded;//public to be read by PlayerAnimationsScript
@@ -24,9 +23,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private BoxCollider2D boxCollider2D;
     [SerializeField] private Vector3 boxOffset;
     [SerializeField] private Vector3 boxSize;
-    // public Transform groundCheck;
 
     [Header("Wall check")]
+    [SerializeField] private bool isWalled;// serialized for testing
     [SerializeField] private LayerMask whatIsWall;
     [SerializeField] private Vector3 wallBoxSize;
 
@@ -44,6 +43,7 @@ public class PlayerController : MonoBehaviour
     {
         MovePlayer();
         BoxCastGroundCheck();
+        BoxCastWallCheck();
 
         
     }
@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawWireCube(boxCollider2D.bounds.center + boxOffset, boxSize);//groundCheck
 
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(boxCollider2D.bounds.center, wallBoxSize);
+        Gizmos.DrawWireCube(boxCollider2D.bounds.center, wallBoxSize);//wall check
 
 
     }
@@ -102,7 +102,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
+    private bool BoxCastWallCheck()
+    {
+        RaycastHit2D hit = Physics2D.BoxCast
+        (boxCollider2D.bounds.center, wallBoxSize, 0, Vector2.right, 0 , whatIsWall );
+        
+        if(hit.collider != null)
+        {
+            isWalled = true;
+            return isWalled;
+        }
+        else{
+            isWalled = false;
+            return isWalled;
+        }
+    }
 
     private void FaceDirection()
     {
