@@ -31,21 +31,20 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        moveInput = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
 
-        if (facingRight == false && moveInput > 0)
-        {
-            Flip();
-        }
-        else if (facingRight == true && moveInput < 0)
-        {
-            Flip();
-        }
+       
     }
 
     private void Update()
+    {
+        moveInput = Input.GetAxisRaw("Horizontal");
+        FaceDirection();
+        MovePlayer();
+        Jump();
+    }
+
+    private void Jump()
     {
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true)
         {
@@ -53,9 +52,10 @@ public class PlayerController : MonoBehaviour
             isJumping = true;
             jumpCounter = jumpTime;
         }
+        /*
         if (isGrounded == false && extraJumps >= 1 && Input.GetKeyDown(KeyCode.Space))
         {
-            rb.velocity = Vector2.up * jumpForce * 1.2f;
+            rb.velocity = Vector2.up * jumpForce;
             extraJumps--;
         }
         if (isGrounded == true)
@@ -78,8 +78,25 @@ public class PlayerController : MonoBehaviour
         {
             isJumping = false;
         }
+        */
     }
 
+    private void MovePlayer()
+    {
+        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+
+    }
+    private void FaceDirection()
+    {
+         if (facingRight == false && moveInput > 0)
+        {
+            Flip();
+        }
+        else if (facingRight == true && moveInput < 0)
+        {
+            Flip();
+        }
+    }
     private void Flip()
     {
         facingRight = !facingRight;
