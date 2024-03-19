@@ -14,25 +14,24 @@ public class PlayerController : MonoBehaviour
     [Header("Jump")]
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float jumpTime;
-    public bool isGrounded;//public to be read by PlayerAnimationsScript
-    [SerializeField] private float checkRadius;
+    // [SerializeField] private float checkRadius;
     [SerializeField] private int maxExtraJumps;
-    public Transform groundCheck;
-    public LayerMask whatIsGround;
     private float jumpCounter;
     private bool isJumping;
     private int extraJumps;
 
-    [Header("BoxCast")]
-    private BoxCollider2D boxCollider2D;
+    [Header("Ground check")]
+    public bool isGrounded;//public to be read by PlayerAnimationsScript
+    [SerializeField] private BoxCollider2D boxCollider2D;
     [SerializeField] private Vector3 boxOffset;
     [SerializeField] private Vector3 boxSize;
+    public LayerMask whatIsGround;
+    public Transform groundCheck;
 
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        boxCollider2D = GetComponent<BoxCollider2D>();
     }
     
 
@@ -41,7 +40,7 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
         FaceDirection();
         
-        CheckIsGrounded();
+        BoxCastGroundCheck();
 
         
     }
@@ -107,13 +106,26 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(boxCollider2D.bounds.center + boxOffset,boxSize);
+        Gizmos.DrawWireCube(boxCollider2D.bounds.center + boxOffset, boxSize);
     }
 
-    private void CheckIsGrounded()
+    private bool BoxCastGroundCheck()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+        RaycastHit2D hit = Physics2D.BoxCast
+        (boxCollider2D.bounds.center + boxOffset,boxSize, 0 , Vector2.right, 0, whatIsGround);
+
+        if (hit.collider != null)
+        {
+            isGrounded = true;
+            return isGrounded;
+        }
+        else{
+            isGrounded = false;
+            return isGrounded;
+        }
     }
+
+    
 
     private void FaceDirection()
     {
