@@ -31,8 +31,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        moveInput = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        MovePlayer();
+        
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
 
         if (facingRight == false && moveInput > 0)
@@ -78,6 +78,12 @@ public class PlayerController : MonoBehaviour
         {
             isJumping = false;
         }
+    }
+
+    private void MovePlayer()
+    {
+        moveInput = Input.GetAxisRaw("Horizontal");
+        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
     }
 
     private void Flip()
