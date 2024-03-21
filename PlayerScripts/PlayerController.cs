@@ -55,6 +55,16 @@ public class PlayerController : MonoBehaviour
        
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireCube(boxCollider2D.bounds.center + boxOffset, boxSize);//groundCheck
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(boxCollider2D.bounds.center, wallBoxSize);//wall check
+
+
+    }
     private void Jump()
     {
         if(isGrounded && Input.GetKeyDown(KeyCode.Space))
@@ -74,16 +84,6 @@ public class PlayerController : MonoBehaviour
                 isJumping = false;
             }
         }
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(boxCollider2D.bounds.center + boxOffset, boxSize);//groundCheck
-
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(boxCollider2D.bounds.center, wallBoxSize);//wall check
-
-
     }
 
     private bool BoxCastGroundCheck()

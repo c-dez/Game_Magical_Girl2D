@@ -24,7 +24,7 @@ public class Enemy_Ai : MonoBehaviour
     [SerializeField] private Transform bulletGun;
 
     //cooldown
-    [SerializeField] private float cooldownTime = 2f;
+    [SerializeField] private float cooldownTime = 1f;
     private float timeStamp;
 
 
