@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         Jump();
-
+       
        
     }
 
@@ -73,15 +73,16 @@ public class PlayerController : MonoBehaviour
             isJumping = true;
             jumpCounter = jumpTime;
         }
+        if(isJumping && !isGrounded && Input.GetKeyUp(KeyCode.Space))
+        {
+            isJumping = false;
+        }
         if(isJumping && Input.GetKey(KeyCode.Space))
         {
-            if(jumpCounter > 0)
+            if(jumpCounter> 0)
             {
                 rb.velocity = Vector2.up * jumpForce;
                 jumpCounter -= Time.deltaTime;
-            }
-            else{
-                isJumping = false;
             }
         }
     }
