@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     [Header("Wall Jump")]
     private bool isWallJumping = false;
     [SerializeField] private float wallJumpForce = 30f;
-
+    [SerializeField] private float WallSlideSpeed;
 
 
 
@@ -59,17 +59,25 @@ public class PlayerController : MonoBehaviour
     {
         Jump();
         WallJump();
+        WallSlide();
 
        
        
        
+    }
+    private void WallSlide()
+    {
+        if(isTouchingWall && moveInput != 0 && !Input.GetKey(KeyCode.Space))
+        {
+            rb.velocity = new Vector2(rb.velocity.x, -WallSlideSpeed);
+        }
     }
 
     private void WallJump()
     {
          if(!isWallJumping  && isTouchingWall && Input.GetKeyDown(KeyCode.Space))
         {
-            rb.velocity = Vector2.up * wallJumpForce;
+            rb.velocity = new Vector2(rb.velocity.x, wallJumpForce);
             isWallJumping = true;
         }
         if(isWallJumping  && !isTouchingWall)
