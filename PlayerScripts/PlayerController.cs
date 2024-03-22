@@ -1,8 +1,9 @@
-using JetBrains.Annotations;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+    [SerializeField] private bool showGizmos;
     //moving
     [Header("Move")]
     private Rigidbody2D rb;
@@ -26,7 +27,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Vector3 boxSize;
 
     [Header("Wall check")]
-    [SerializeField] private bool isTouchingWall;// serialized for testing
+    public bool isTouchingWall; //public to be read in the future for PlayerAnimation?
     [SerializeField] private LayerMask whatIsWall;
     [SerializeField] private Vector3 wallBoxSize;
 
@@ -49,10 +50,6 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
         BoxCastGroundCheck();
         BoxCastWallCheck();
-
-        
-
-        
     }
 
     private void Update()
@@ -60,16 +57,15 @@ public class PlayerController : MonoBehaviour
         Jump();
         WallJump();
         WallSlide();
-
-       
-       
-       
     }
-    private void WallSlide()
+
+    
+    private void WallSlide() //incompleto
     {
         if(isTouchingWall && moveInput != 0 && !Input.GetKey(KeyCode.Space))
         {
             rb.velocity = new Vector2(rb.velocity.x, -WallSlideSpeed);
+            //por hacer: cuando estoy sliding y salto por primera vez, salta, a la segunda vez saltar, no lo hace y deja de slide
         }
     }
 
@@ -92,11 +88,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireCube(boxCollider2D.bounds.center + boxOffset, boxSize);//groundCheck
+        if(showGizmos)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireCube(boxCollider2D.bounds.center + boxOffset, boxSize); //groundCheck
 
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(boxCollider2D.bounds.center, wallBoxSize);//wall check
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireCube(boxCollider2D.bounds.center, wallBoxSize); //wall check
+        }
 
 
     }
