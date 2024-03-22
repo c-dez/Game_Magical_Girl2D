@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -29,6 +30,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask whatIsWall;
     [SerializeField] private Vector3 wallBoxSize;
 
+    [Header("Wall Jump")]
+    private bool isWallJumping = false;
+    [SerializeField] private float wallJumpForce = 30f;
+
 
 
 
@@ -46,13 +51,35 @@ public class PlayerController : MonoBehaviour
         BoxCastWallCheck();
 
         
+
+        
     }
 
     private void Update()
     {
         Jump();
+        WallJump();
+
        
        
+       
+    }
+
+    private void WallJump()
+    {
+         if(isWallJumping == false && isWalled && Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.velocity = Vector2.up * wallJumpForce;
+            isWallJumping = true;
+        }
+        if(isWallJumping == true && !isWalled)
+        {
+            isWallJumping = false;
+        }
+        if(isGrounded && isWalled)
+        {
+            isWallJumping = false;
+        }
     }
 
     private void OnDrawGizmos()
