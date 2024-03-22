@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Vector3 boxSize;
 
     [Header("Wall check")]
-    [SerializeField] private bool isWalled;// serialized for testing
+    [SerializeField] private bool isTouchingWall;// serialized for testing
     [SerializeField] private LayerMask whatIsWall;
     [SerializeField] private Vector3 wallBoxSize;
 
@@ -67,16 +67,16 @@ public class PlayerController : MonoBehaviour
 
     private void WallJump()
     {
-         if(isWallJumping == false && isWalled && Input.GetKeyDown(KeyCode.Space))
+         if(!isWallJumping  && isTouchingWall && Input.GetKeyDown(KeyCode.Space))
         {
             rb.velocity = Vector2.up * wallJumpForce;
             isWallJumping = true;
         }
-        if(isWallJumping == true && !isWalled)
+        if(isWallJumping  && !isTouchingWall)
         {
             isWallJumping = false;
         }
-        if(isGrounded && isWalled)
+        if(isGrounded && isTouchingWall)
         {
             isWallJumping = false;
         }
@@ -137,12 +137,12 @@ public class PlayerController : MonoBehaviour
         
         if(hit.collider != null)
         {
-            isWalled = true;
-            return isWalled;
+            isTouchingWall = true;
+            return isTouchingWall;
         }
         else{
-            isWalled = false;
-            return isWalled;
+            isTouchingWall = false;
+            return isTouchingWall;
         }
     }
 
